@@ -15,3 +15,6 @@ https://github.com/PavelMurachev/tdesktop/compare/f985723b552b30fe1c17d377d57f44
 
 Technical proposal, evidence, reproducible component tests and limitations:
 https://github.com/PavelMurachev/tdesktop/tree/proposal/wallet-profile-privacy/wallet-profile-proposal
+
+Related Desktop draft pull request:
+https://github.com/telegramdesktop/tdesktop/pull/31532

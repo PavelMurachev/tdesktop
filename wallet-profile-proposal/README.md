@@ -1,6 +1,6 @@
 # Owner wallet access and profile privacy
 
-Status: Desktop candidate patch plus API/product proposal, prepared 2026-10-27. No upstream pull request or Telegram suggestion has been submitted for this wallet work.
+Status: Desktop candidate patch plus API/product proposal, prepared 2026-10-27. Submitted as [draft PR #31532](https://github.com/telegramdesktop/tdesktop/pull/31532). The Telegram API/product suggestion is prepared but has not yet been submitted.
 
 [Client change](https://github.com/PavelMurachev/tdesktop/compare/f985723b552b30fe1c17d377d57f44e61a15a8c4...55511e7726fb995556738dce394168f1be44ba63) · [API proposal](API_PROPOSAL.md) · [Evidence](EVIDENCE.md) · [Checks and reproduction](TESTING.md)
 
@@ -18,7 +18,7 @@ The existing profile balance control hides zero and conflates an absent card wit
 - Opens the existing wallet window from this fallback control; the existing Add Funds action can show the address without a positive balance.
 - Keeps the existing card view when a card exists and keeps other users' profile behavior unchanged.
 
-No new settings, translations, API definitions, wallet keys, signing, transfers or wallet creation are introduced. Three profile source files change. The code branch contains only this change, not this documentation or gift-crafting work.
+No new settings, translations, API definitions, wallet keys, signing, transfers or wallet creation are introduced. Three profile source files change. The code branch contains only this change, not this documentation or gift-crafting work. The PR has one consolidated commit, 16ebb5704d27ef4fdbf567471a99bd050bb134a1, with the same tested source tree a3045fdda9605f40c22487f2823f4f7df65b1511 as the original candidate.
 
 ## What still needs Telegram
 
