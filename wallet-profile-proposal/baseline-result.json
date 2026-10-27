@@ -1,0 +1,15 @@
+{
+  "mode": "original negative control",
+  "scope": "Extracted production C++ fragments; real Qt Widgets and rpl; synthetic data and paint adapters; no full Telegram build or RPC.",
+  "fragment_sha256": {
+    "BALANCE_PRODUCER": "451db8eca14f4af9b9faf88fb9f1a153bc09db8b673b6517cf26e8d796b85acf",
+    "SET_CONTENT": "212491563b20ae61e79c49cf81b3a2fd205f9d5b6d1841daaabb6e37b88443aa",
+    "ACTIONABLE": "474bdac33f5938843a2f601a3c7a7e5d7b702f0e4d3a5194d7347f5944f5304d",
+    "CLICK_BODY": "b524a7a7721a9c22067c44e1bf09c7652e00387abe478a5bd28ca9c275d421f5"
+  },
+  "compiler": "g++.exe (Rev6, Built by MSYS2 project) 16.2.0",
+  "build_exit_code": 0,
+  "test_exit_code": 1,
+  "output": "",
+  "stderr": "Case: self=1, enabled=0, presence=0, private_balance=-1, card=0, expected=0, observed=hidden\nFAIL: matrix value\n"
+}

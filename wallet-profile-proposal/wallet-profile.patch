@@ -1,0 +1,141 @@
+diff --git a/Telegram/SourceFiles/info/profile/info_profile_balance_pill.cpp b/Telegram/SourceFiles/info/profile/info_profile_balance_pill.cpp
+--- a/Telegram/SourceFiles/info/profile/info_profile_balance_pill.cpp
++++ b/Telegram/SourceFiles/info/profile/info_profile_balance_pill.cpp
+@@ -12,6 +12,7 @@
+ #include "data/data_user_wallet_card.h"
+ #include "info/channel_statistics/earn/earn_icons.h"
+ #include "lang/lang_keys.h"
++#include "main/main_app_config.h"
+ #include "main/main_session.h"
+ #include "ui/controls/ton_common.h"
+ #include "ui/effects/animation_value.h"
+@@ -19,6 +20,7 @@
+ #include "ui/rect.h"
+ #include "ui/ui_utility.h"
+ #include "wallet/wallet_fiat.h"
++#include "wallet/wallet_session.h"
+ 
+ #include "styles/style_info.h"
+ #include "styles/style_info_profile_top_bar.h"
+@@ -41,6 +43,44 @@
+ 	};
+ }
+ 
++[[nodiscard]] rpl::producer<std::optional<int64>> ProfileBalanceValue(
++		not_null<UserData*> user) {
++	auto cardBalance = user->session().changes().peerFlagsValue(
++		user,
++		Data::PeerUpdate::Flag::WalletCard
++	) | rpl::map([=]() -> std::optional<int64> {
++		const auto card = user->walletCard();
++		if (!card || card->balance < 0
++			|| (!user->isSelf() && !card->balance)) {
++			return std::nullopt;
++		}
++		return card->balance;
++	});
++	if (!user->isSelf()) {
++		return cardBalance;
++	}
++	const auto session = &user->session();
++	return rpl::combine(
++		std::move(cardBalance),
++		session->wallet().presenceValue(),
++		session->wallet().balanceNanoValue(),
++		session->appConfig().value() | rpl::map([=] {
++			return session->appConfig().walletAvailable();
++		})
++	) | rpl::map([=](
++			std::optional<int64> card,
++			Wallet::Presence presence,
++			int64 balance,
++			bool available) -> std::optional<int64> {
++		if (user->walletCard()) {
++			return card;
++		}
++		return (available && presence == Wallet::Presence::Ready && balance >= 0)
++			? std::make_optional(balance)
++			: std::nullopt;
++	});
++}
++
+ } // namespace
+ 
+ BalancePill::BalancePill(
+@@ -73,14 +113,10 @@
+ 
+ 	rpl::combine(
+ 		tr::lng_wallet_profile_balance(),
+-		user->session().changes().peerFlagsValue(
+-			user,
+-			Data::PeerUpdate::Flag::WalletCard
+-		) | rpl::map([=] {
+-			const auto card = user->walletCard();
+-			return card ? card->balance : int64();
+-		}) | rpl::distinct_until_changed()
+-	) | rpl::on_next([=](const QString &label, int64 balance) {
++		ProfileBalanceValue(user) | rpl::distinct_until_changed()
++	) | rpl::on_next([=](
++			const QString &label,
++			std::optional<int64> balance) {
+ 		setContent(label, balance);
+ 	}, lifetime());
+ }
+@@ -138,15 +174,17 @@
+ 	p.setOpacity(was);
+ }
+ 
+-void BalancePill::setContent(const QString &label, int64 balance) {
+-	if (balance <= 0) {
++void BalancePill::setContent(
++		const QString &label,
++		std::optional<int64> balance) {
++	if (!balance) {
+ 		if (!isHidden()) {
+ 			++_appearanceRevision;
+ 		}
+ 		hide();
+ 		return;
+ 	}
+-	const auto parts = BalanceParts(balance);
++	const auto parts = BalanceParts(*balance);
+ 	if (isHidden()
+ 		|| _label != label
+ 		|| _amount.parts().whole != parts.whole
+diff --git a/Telegram/SourceFiles/info/profile/info_profile_balance_pill.h b/Telegram/SourceFiles/info/profile/info_profile_balance_pill.h
+--- a/Telegram/SourceFiles/info/profile/info_profile_balance_pill.h
++++ b/Telegram/SourceFiles/info/profile/info_profile_balance_pill.h
+@@ -33,7 +33,7 @@
+ 	QString accessibilityName() override;
+ 
+ private:
+-	void setContent(const QString &label, int64 balance);
++	void setContent(const QString &label, std::optional<int64> balance);
+ 	void refreshIcon();
+ 	void refreshGeometry();
+ 	void paintBackground(QPainter &p) const;
+diff --git a/Telegram/SourceFiles/info/profile/info_profile_top_bar.cpp b/Telegram/SourceFiles/info/profile/info_profile_top_bar.cpp
+--- a/Telegram/SourceFiles/info/profile/info_profile_top_bar.cpp
++++ b/Telegram/SourceFiles/info/profile/info_profile_top_bar.cpp
+@@ -98,6 +98,7 @@
+ #include "ui/widgets/tooltip.h"
+ #include "ui/wrap/fade_wrap.h"
+ #include "wallet/wallet_card_view.h"
++#include "wallet/wallet_panel.h"
+ #include "window/themes/window_theme.h"
+ #include "window/window_peer_menu.h"
+ #include "window/window_session_controller.h"
+@@ -502,7 +503,12 @@
+ 			_edgeColor.value());
+ 		const auto pill = _balancePill.get();
+ 		pill->setClickedCallback([=] {
+-			if (pill->actionable()) {
++			if (!pill->actionable()) {
++				return;
++			}
++			if (user->isSelf() && !user->walletCard()) {
++				Wallet::ShowWallet(&user->session());
++			} else {
+ 				Wallet::ShowCardView(controller, user, pill);
+ 			}
+ 		});

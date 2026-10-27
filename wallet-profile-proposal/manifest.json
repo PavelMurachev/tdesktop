@@ -1,0 +1,17 @@
+{
+  "base_commit": "f985723b552b30fe1c17d377d57f44e61a15a8c4",
+  "files": {
+    "Telegram/SourceFiles/info/profile/info_profile_balance_pill.cpp": {
+      "before_lf_sha256": "19d7743363bb7d7e7c87fbbc2c24820623af0fad4c608fc9c1d9e60199b001a3",
+      "after_lf_sha256": "f6d8784689dab9cbab3d47f4a6405021916388f314aba43a4e1907c6f7596d76"
+    },
+    "Telegram/SourceFiles/info/profile/info_profile_balance_pill.h": {
+      "before_lf_sha256": "5f3632a54de1cede03d0bce855dc403c510bfc683ac3f6b17c00cd68bcee537b",
+      "after_lf_sha256": "8544b2539f5287f434b99175ac2da19eeb31a057e83a0813fd4dc5c6754ec65a"
+    },
+    "Telegram/SourceFiles/info/profile/info_profile_top_bar.cpp": {
+      "before_lf_sha256": "4005ffe1a2dccaf18e7868d707b9fb1b3e7d031afb805ff1a3cc41d0155f994b",
+      "after_lf_sha256": "e86950ac4b6218a2f0f7befc88d6a356d67f35a7463f06ca01c0ac32454398b0"
+    }
+  }
+}

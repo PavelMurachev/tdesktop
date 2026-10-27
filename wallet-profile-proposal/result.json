@@ -1,0 +1,15 @@
+{
+  "mode": "patched",
+  "scope": "Extracted production C++ fragments; real Qt Widgets and rpl; synthetic data and paint adapters; no full Telegram build or RPC.",
+  "fragment_sha256": {
+    "BALANCE_PRODUCER": "a9e1b278165eff97a77d3de39f8405d61ebf912d9a2de5033e32915bac699d13",
+    "SET_CONTENT": "09b08ff0cbd033a42053fc835c4d2ac9ce35e0d9297e5c1f0579b0fcaa7f9d26",
+    "ACTIONABLE": "474bdac33f5938843a2f601a3c7a7e5d7b702f0e4d3a5194d7347f5944f5304d",
+    "CLICK_BODY": "436ccd86eebb748bbe0bbd0c93962da2bd25bf2f0854d73499d64af3a87a9154"
+  },
+  "compiler": "g++.exe (Rev6, Built by MSYS2 project) 16.2.0",
+  "build_exit_code": 0,
+  "test_exit_code": 0,
+  "output": "PASS: 600 state combinations with Qt widget visibility and click routing\nPASS: live updates, account isolation, unavailable states, card arrival/removal, lifetime teardown\nPASS: 3320 assertions; Qt 6.11.2\n",
+  "stderr": ""
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "project": "desktop-app/lib_base",
+    "commit": "95a543e426e35938dd632139d0bb828b268c3b4c",
+    "url": "https://codeload.github.com/desktop-app/lib_base/zip/95a543e426e35938dd632139d0bb828b268c3b4c",
+    "archive_sha256": "64549ccd4b49100f685a8373fa2c7fbfe8e8dc811c2a57f50f747c896b91bf75"
+  },
+  {
+    "project": "desktop-app/lib_crl",
+    "commit": "de724667d7bdfbf906f78fc405af1ee9f7723d49",
+    "url": "https://codeload.github.com/desktop-app/lib_crl/zip/de724667d7bdfbf906f78fc405af1ee9f7723d49",
+    "archive_sha256": "628da9a9067cdf78151d25a1ef9ca2aac374379eecbba59b6f6750173254d424"
+  },
+  {
+    "project": "desktop-app/lib_rpl",
+    "commit": "c57cccffb01d85570decd7fccb88419c9a682e63",
+    "url": "https://codeload.github.com/desktop-app/lib_rpl/zip/c57cccffb01d85570decd7fccb88419c9a682e63",
+    "archive_sha256": "4e5ec4b9114694707daffe4bf3f6300f577e7b184c6741d587fef0319fec7fc9"
+  },
+  {
+    "project": "microsoft/GSL",
+    "commit": "87f9d768866548b5b86e72be66c60c5abd4d9b37",
+    "url": "https://codeload.github.com/microsoft/GSL/zip/87f9d768866548b5b86e72be66c60c5abd4d9b37",
+    "archive_sha256": "0c4717e2b0b13d4b8b533d09b1cdc16d9027c7118b7114def46101695ee85462"
+  },
+  {
+    "project": "ericniebler/range-v3",
+    "commit": "5ba39112d2eafbb3c851a16a537f29b445022998",
+    "url": "https://codeload.github.com/ericniebler/range-v3/zip/5ba39112d2eafbb3c851a16a537f29b445022998",
+    "archive_sha256": "eec99028d2a10891439c99661870f8f94b404677d8212dcc51fda7ff18527a3c"
+  }
+]

@@ -1,0 +1,216 @@
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
+#include <QtCore/QString>
+#include <base/assertion.h>
+#include <base/basic_types.h>
+#include <rpl/combine.h>
+#include <rpl/event_stream.h>
+#include <rpl/map.h>
+#include <rpl/distinct_until_changed.h>
+#include <rpl/variable.h>
+#include <iostream>
+#include <optional>
+#include <stdexcept>
+#include <vector>
+#include <limits>
+
+namespace base::assertion {
+void log(const char *message, const char *file, int line) {
+    std::cerr << message << " at " << file << ':' << line << '\n';
+}
+}
+namespace Wallet {
+enum class Presence { Unknown, Missing, Provisioning, Ready, Unavailable, AddressUnreadable };
+struct State {
+    rpl::variable<Presence> presence = Presence::Unknown;
+    rpl::variable<int64> balance = 0;
+    int reads = 0;
+    auto presenceValue() { ++reads; return presence.value(); }
+    auto balanceNanoValue() { ++reads; return balance.value(); }
+};
+}
+namespace Data {
+struct PeerUpdate { enum class Flag { WalletCard }; };
+}
+struct UserData;
+struct Changes {
+    rpl::event_stream<> updates;
+    auto peerFlagsValue(UserData *, Data::PeerUpdate::Flag) {
+        return rpl::single(rpl::empty) | rpl::then(updates.events());
+    }
+};
+struct Config {
+    rpl::variable<bool> available = true;
+    auto value() { return available.value() | rpl::to_empty; }
+    bool walletAvailable() const { return available.current(); }
+};
+struct Session {
+    Wallet::State state;
+    Changes changes_;
+    Config config;
+    auto &wallet() { return state; }
+    auto &changes() { return changes_; }
+    auto &appConfig() { return config; }
+};
+struct Card { int64 balance = 0; };
+struct UserData {
+    Session session_;
+    bool self = true;
+    std::optional<Card> card;
+    auto &session() { return session_; }
+    bool isSelf() const { return self; }
+    const Card *walletCard() const { return card ? &*card : nullptr; }
+};
+
+// @BALANCE_PRODUCER@
+
+struct Parts { QString whole, fraction; };
+Parts BalanceParts(int64 amount) { return {QString::number(amount), QString()}; }
+struct Fonts { int big = 0, small = 0; };
+struct Painter {
+    Parts value;
+    const Parts &parts() const { return value; }
+    void setContent(Fonts, Parts parts) { value = std::move(parts); }
+};
+namespace st {
+constexpr int infoProfileBalancePillAmountFont = 0;
+constexpr int infoProfileBalancePillFractionFont = 0;
+}
+class BalancePill : public QWidget {
+public:
+    void setContent(const QString &label, std::optional<int64> balance);
+    bool actionable() const;
+    void refreshGeometry() {}
+    void accessibilityNameChanged() {}
+    uint64 _appearanceRevision = 0;
+    double _opacity = 1.;
+    QString _label;
+    Painter _amount;
+
+};
+// @SET_CONTENT@
+// @ACTIONABLE@
+
+struct Controller {};
+int walletOpens = 0, cardOpens = 0;
+Session *openedSession = nullptr;
+namespace Wallet {
+void ShowWallet(Session *session) { ++walletOpens; openedSession = session; }
+void ShowCardView(Controller *, UserData *user, BalancePill *) {
+    if (user->walletCard()) ++cardOpens;
+}
+}
+void click(Controller *controller, UserData *user, BalancePill *pill) {
+    auto callback = [=] {
+        // @CLICK_BODY@
+    };
+    callback();
+}
+int checks = 0;
+void check(bool condition, const char *name) {
+    ++checks;
+    if (!condition) throw std::runtime_error(name);
+}
+int main(int argc, char **argv) {
+    QApplication app(argc, argv);
+    try {
+        const auto balances = std::vector<int64>{-1, 0, 1, 10000000, std::numeric_limits<int64>::max()};
+        const auto cards = std::vector<std::optional<int64>>{std::nullopt, -1, 0, 1, 10000000};
+        const auto states = std::vector<Wallet::Presence>{
+            Wallet::Presence::Unknown, Wallet::Presence::Missing,
+            Wallet::Presence::Provisioning, Wallet::Presence::Ready,
+            Wallet::Presence::Unavailable, Wallet::Presence::AddressUnreadable};
+        int matrix = 0;
+        for (bool self : {false, true}) for (bool enabled : {false, true})
+        for (auto state : states) for (auto balance : balances) for (auto card : cards) {
+            UserData user;
+            user.self = self;
+            user.session_.state.presence = state;
+            user.session_.state.balance = balance;
+            user.session_.config.available = enabled;
+            if (card) user.card = Card{*card};
+            std::optional<int64> observed;
+            int events = 0;
+            rpl::lifetime lifetime;
+            ProfileBalanceValue(&user) | rpl::on_next([&](std::optional<int64> value) {
+                observed = value; ++events;
+            }, lifetime);
+            std::optional<int64> expected;
+            if (card && *card >= 0 && (self || *card > 0)) expected = card;
+            else if (!card && self && enabled && state == Wallet::Presence::Ready && balance >= 0) expected = balance;
+            if (events != 1 || observed != expected) {
+                std::cerr << "Case: self=" << self << ", enabled=" << enabled
+                    << ", presence=" << int(state) << ", private_balance=" << balance
+                    << ", card=" << (card ? std::to_string(*card) : "absent")
+                    << ", expected=" << (expected ? std::to_string(*expected) : "hidden")
+                    << ", observed=" << (observed ? std::to_string(*observed) : "hidden") << '\n';
+            }
+            check(events == 1 && observed == expected, "matrix value");
+            check(self || user.session_.state.reads == 0, "other profile must not read own wallet");
+            BalancePill pill;
+            pill.setContent(QStringLiteral("Balance"), observed);
+            check(pill.isHidden() == !expected.has_value(), "widget visibility");
+            if (expected) check(pill._amount.parts().whole == QString::number(*expected), "display amount");
+            Controller controller;
+            walletOpens = cardOpens = 0;
+            click(&controller, &user, &pill);
+            check(walletOpens == (expected && self && !card ? 1 : 0), "wallet route");
+            check(cardOpens == (expected && card ? 1 : 0), "card route");
+            if (walletOpens) check(openedSession == &user.session_, "correct account");
+            ++matrix;
+        }
+        std::cout << "PASS: " << matrix << " state combinations with Qt widget visibility and click routing\n";
+        {
+            UserData user;
+            BalancePill pill;
+            std::vector<std::optional<int64>> values;
+            rpl::lifetime lifetime;
+            ProfileBalanceValue(&user) | rpl::distinct_until_changed()
+            | rpl::on_next([&](std::optional<int64> value) {
+                values.push_back(value);
+                pill.setContent(QStringLiteral("Balance"), value);
+            }, lifetime);
+            check(pill.isHidden(), "unknown hidden");
+            user.session_.state.presence = Wallet::Presence::Ready;
+            check(!pill.isHidden() && pill._amount.parts().whole == QStringLiteral("0"), "ready zero shown");
+            const auto revision = pill._appearanceRevision;
+            user.session_.changes_.updates.fire({});
+            check(pill._appearanceRevision == revision, "duplicate deduplicated");
+            user.card = Card{0};
+            user.session_.changes_.updates.fire({});
+            check(!pill.isHidden() && pill._appearanceRevision == revision, "card arrival with equal zero");
+            Controller controller;
+            walletOpens = cardOpens = 0;
+            click(&controller, &user, &pill);
+            check(cardOpens == 1 && walletOpens == 0, "card route reevaluated");
+            user.card.reset();
+            user.session_.changes_.updates.fire({});
+            click(&controller, &user, &pill);
+            check(walletOpens == 1, "fallback after card removal");
+            user.session_.state.balance = 15;
+            check(pill._amount.parts().whole == QStringLiteral("15"), "live private balance");
+            user.session_.config.available = false;
+            check(pill.isHidden(), "disabled fallback hidden");
+            user.session_.config.available = true;
+            check(!pill.isHidden(), "reenabled fallback");
+            user.session_.state.presence = Wallet::Presence::Unavailable;
+            check(pill.isHidden(), "unavailable hidden");
+            user.session_.state.presence = Wallet::Presence::Ready;
+            pill._opacity = 0;
+            walletOpens = cardOpens = 0;
+            click(&controller, &user, &pill);
+            check(walletOpens == 0 && cardOpens == 0, "transparent pill inactive");
+            const auto count = values.size();
+            lifetime.destroy();
+            user.session_.state.balance = 42;
+            user.session_.changes_.updates.fire({});
+            user.session_.config.available = false;
+            check(values.size() == count, "destroyed subscription silent");
+        }
+        std::cout << "PASS: live updates, account isolation, unavailable states, card arrival/removal, lifetime teardown\n";
+        std::cout << "PASS: " << checks << " assertions; Qt " << qVersion() << '\n';
+    } catch (const std::exception &error) {
+        std::cerr << "FAIL: " << error.what() << '\n';
+        return 1;
+    }
+}
