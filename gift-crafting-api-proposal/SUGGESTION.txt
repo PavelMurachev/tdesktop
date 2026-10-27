@@ -1,0 +1,19 @@
+Title: Allow all eligible gifts of craft-enabled types, including exported and TON gifts
+
+Please provide a supported crafting path for every existing, unconsumed gift in a base gift type where crafting is enabled, including previously exported/returned gifts, sets consisting entirely of TON gifts, and authorized channel-owned gifts.
+
+The documented API prohibits a TON gift in the first slot and reuses the first ingredient's identity. Desktop also excludes channel gifts in its entry check. A blanket prohibition based only on past export history is not established by the public documentation and needs clarification.
+
+Suggested direction: a fresh result identity, versioned server recipes and explicit eligibility reasons, plus a durable prepare/commit/status flow. TON inputs would require a Telegram-supported custody and consumption mechanism. Ownership, channel permissions, cooldowns, valid recipes and one-time consumption must remain enforced.
+
+Technical proposal, evidence matrix, offline model and test report:
+https://github.com/PavelMurachev/tdesktop/tree/proposal/gift-crafting-api/gift-crafting-api-proposal
+
+The offline model passes 27 tests covering retries, competing operations and recovery from simulated failures. It is not Telegram backend code or a TON contract, and has not been tested with real gifts. The proposal lists integration work that requires Telegram's infrastructure.
+
+Related client bug fix, with narrower scope:
+https://github.com/telegramdesktop/tdesktop/pull/31531
+
+Related suggestion about crafting mechanics:
+https://bugs.telegram.org/c/51489
+This proposal specifically concerns eligibility across ownership/custody states. Please redirect or merge it if an existing discussion covers that scope.
