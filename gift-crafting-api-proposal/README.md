@@ -4,7 +4,7 @@ Proposal for Telegram maintainers, prepared 2026-10-27. This is a discussion pac
 
 Goal: provide a supported crafting path for every existing, unconsumed gift in a craft-enabled **base gift type**, including previously exported/returned gifts, sets consisting entirely of TON gifts, and gifts owned by channels with appropriate authorization. Ownership checks, recipe rules, temporary locks and one-time consumption remain necessary.
 
-Start with [the evidence and eligibility matrix](ELIGIBILITY.md), then [the proposed protocol](RFC.md). [The test report](RESULTS.md) distinguishes what the offline model verifies from what still needs Telegram infrastructure. [The submission text](SUGGESTION.txt) is ready for the platform's Suggestions board; [the search record](RELATED.md) lists related cards.
+Start with [the evidence and eligibility matrix](ELIGIBILITY.md), then [the proposed protocol](RFC.md). [The test report](RESULTS.md) distinguishes what the offline model verifies from what still needs Telegram infrastructure. The proposal was published as [Telegram suggestion #67174: Support crafting with exported, TON-held and channel-owned gifts](https://bugs.telegram.org/c/67174). [The original submission draft](SUGGESTION.txt) is retained for reference; [the search record](RELATED.md) lists related cards.
 
 ## Run the model tests
 
