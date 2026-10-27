@@ -1,6 +1,6 @@
 # Owner wallet access and profile privacy
 
-Status: Desktop candidate patch plus API/product proposal, prepared 2026-10-27. Submitted as [draft PR #31532](https://github.com/telegramdesktop/tdesktop/pull/31532). The Telegram API/product suggestion is prepared but has not yet been submitted.
+Status: Desktop candidate patch plus API/product proposal, prepared 2026-10-27. Submitted as [draft PR #31532](https://github.com/telegramdesktop/tdesktop/pull/31532). The API/product request is published as [Telegram suggestion #67181](https://bugs.telegram.org/c/67181), verified Open on 2026-10-27.
 
 [Client change](https://github.com/PavelMurachev/tdesktop/compare/f985723b552b30fe1c17d377d57f44e61a15a8c4...55511e7726fb995556738dce394168f1be44ba63) · [API proposal](API_PROPOSAL.md) · [Evidence](EVIDENCE.md) · [Checks and reproduction](TESTING.md)
 
@@ -34,8 +34,8 @@ Extracted production C++ logic compiled and passed 600 state combinations plus e
 
 These are component checks with synthetic session/data/painting adapters, not a full Telegram build, visual QA, server test, privacy implementation or real wallet transaction. See TESTING.md for exact scope and outstanding work.
 
-## Suggested submission route
+## Submission status and next steps
 
 The Desktop change is a review candidate for fixing owner access through existing UI. Ask maintainers to confirm that an owner-only profile entry at zero is intended. Full Debug integration and real-account reproduction remain required before calling it ready to merge.
 
-Submit the cross-client product/API request to Telegram's suggestion platform using SUGGESTION.txt. Telegram Desktop's contribution policy excludes new feature/UI implementations; a local privacy toggle would neither meet that policy nor enforce privacy. The API proposal is therefore kept separate from the code patch.
+The cross-client product/API request is published on Telegram's suggestion platform; SUGGESTION.txt records the submitted text and its URL. Telegram Desktop's contribution policy excludes new feature/UI implementations; a local privacy toggle would neither meet that policy nor enforce privacy. The API proposal is therefore kept separate from the code patch.

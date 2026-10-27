@@ -1,20 +1,20 @@
+Published suggestion:
+https://bugs.telegram.org/c/67181
+
 Title:
 Let owners access empty Gram wallets and control wallet visibility in profiles
 
 Description:
-Please let owners of eligible Telegram accounts access their native wallet receiving address and Add Funds flow at zero balance, even when no public wallet card is displayed. If a wallet is not provisioned yet, provide an explicit owner-initiated setup path without requiring another Telegram user to send the first funds. Keep service eligibility rules and existing custody intact.
+Please let owners of eligible Telegram accounts access their native Gram wallet receiving address and Add Funds flow at zero balance, even when no public wallet card is displayed. If a wallet is not provisioned yet, provide an explicit owner-initiated setup path without requiring another Telegram user to send the first funds. Keep service eligibility rules and existing custody intact.
 
-Please also add account-wide, server-enforced controls over who can discover a user's wallet address and balance through Telegram: Everyone, My Contacts or Nobody. Apply the rule to profile wallet cards and to both user-to-address and address-to-user lookups, including force requests and other identity-bearing wallet responses. Keep the owner's own receiving address available regardless of the chosen rule.
+Please also add account-wide, server-enforced controls over who can discover a user's wallet address and balance through Telegram: Everyone, My Contacts or Nobody. Apply the rule to profile wallet cards and both user-to-address and address-to-user lookups, including force requests and other identity-bearing wallet responses. The owner must retain access to their own receiving address regardless of this setting.
 
-A hidden profile alone would not prevent another client from using address lookup APIs. The setting should clearly explain that previously known addresses, public blockchain balances, transaction history and necessary payment-counterparty disclosures cannot be hidden retroactively.
+Hiding the profile card alone would not prevent discovery through other clients or APIs. Clearly explain that previously known addresses, public blockchain balances, transaction history and necessary payment-counterparty disclosures cannot be hidden retroactively.
 
-A Desktop candidate fixes owner profile access for an already ready zero-balance wallet. It does not implement server privacy or provision unavailable wallets. Component checks passed 600 state combinations and 3,320 assertions with Qt/rpl; no full Telegram build or real-wallet tests were performed.
+A related Desktop candidate provides owner profile access for an already ready zero-balance wallet. It does not implement server privacy or provision unavailable wallets. Extracted production C++ component checks passed 600 state combinations and 3,320 assertions with Qt/rpl. No full Telegram build or real-wallet tests were performed.
 
-Source patch:
-https://github.com/PavelMurachev/tdesktop/compare/f985723b552b30fe1c17d377d57f44e61a15a8c4...55511e7726fb995556738dce394168f1be44ba63
-
-Technical proposal, evidence, reproducible component tests and limitations:
-https://github.com/PavelMurachev/tdesktop/tree/proposal/wallet-profile-privacy/wallet-profile-proposal
-
-Related Desktop draft pull request:
+Desktop draft pull request:
 https://github.com/telegramdesktop/tdesktop/pull/31532
+
+Technical proposal, source evidence, reproducible component tests and limitations:
+https://github.com/PavelMurachev/tdesktop/tree/proposal/wallet-profile-privacy/wallet-profile-proposal
