@@ -1,0 +1,22 @@
+{
+  "review_date": "2026-10-28",
+  "model_tests": 36,
+  "negative_controls_detected": 6,
+  "source_hash_mismatch_rejected_before_compilation": true,
+  "python_ast_files": 4,
+  "pyflakes_issues": 0,
+  "scope": "Local offline package audit; not Telegram backend or on-chain validation.",
+  "local_links_verified": 4,
+  "publication_scan": "No matching credential/private-key/email/local-user-path patterns; allowed text files only. Pattern scan is not proof of absence of every possible secret.",
+  "clean_archive_model_tests": 36,
+  "clean_archive_cpp_gate_cases": 40,
+  "clean_archive_cpp_reference_routes": 3,
+  "pinned_source_blobs_verified": 7,
+  "clean_room_directory_contains_spaces": true,
+  "open_items": [
+    "No affected-account/API reproduction",
+    "No server implementation",
+    "No full Telegram build",
+    "No real gift/payment/TON or indexer test"
+  ]
+}

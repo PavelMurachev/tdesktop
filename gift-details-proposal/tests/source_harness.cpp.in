@@ -1,0 +1,75 @@
+#include <cstdint>
+#include <iostream>
+#include <memory>
+#include <string>
+
+struct MessageId { int bare = 0; };
+struct Peer { std::string input() const { return "channel"; } };
+namespace Data {
+struct UniqueGift {
+    std::string slug = "SyntheticGift-1";
+    bool everExported = false;
+    std::string giftAddress;
+};
+struct CreditsHistoryEntry {
+    std::shared_ptr<UniqueGift> uniqueGift;
+    int starsForDetailsRemove = 0;
+};
+struct SavedStarGiftId {
+    int kind = 0;
+    explicit operator bool() const { return kind != 0; }
+    bool isUser() const { return kind == 1; }
+    MessageId userMessageId() const { return {123}; }
+    const Peer *chat() const { static const Peer peer; return &peer; }
+    std::int64_t chatSavedId() const { return 456; }
+};
+}
+struct MTPInputSavedStarGift { std::string kind; std::string value; };
+std::string MTP_string(const std::string &value) { return value; }
+int MTP_int(int value) { return value; }
+std::int64_t MTP_long(std::int64_t value) { return value; }
+MTPInputSavedStarGift MTP_inputSavedStarGiftSlug(const std::string &slug) {
+    return {"slug", slug};
+}
+MTPInputSavedStarGift MTP_inputSavedStarGiftUser(int id) {
+    return {"user", std::to_string(id)};
+}
+MTPInputSavedStarGift MTP_inputSavedStarGiftChat(const std::string &peer, std::int64_t id) {
+    return {peer, std::to_string(id)};
+}
+// @GATE@
+namespace Api {
+// @REFERENCE@
+}
+int main() {
+    auto cases = 0;
+    for (auto present : {false, true}) {
+        for (auto exported : {false, true}) {
+            for (auto address : {false, true}) {
+                for (auto price : {-1, 0, 1, 25, 2147483647}) {
+                    auto entry = Data::CreditsHistoryEntry();
+                    if (present) {
+                        entry.uniqueGift = std::make_shared<Data::UniqueGift>();
+                        entry.uniqueGift->everExported = exported;
+                        entry.uniqueGift->giftAddress = address ? "synthetic" : "";
+                    }
+                    entry.starsForDetailsRemove = price;
+                    if (UniqueGiftCanRemoveDetails(entry) != (present && price > 0)) {
+                        return 1;
+                    }
+                    ++cases;
+                }
+            }
+        }
+    }
+    const auto gift = std::make_shared<Data::UniqueGift>();
+    const auto slug = Api::InputSavedStarGiftId({0}, gift);
+    const auto user = Api::InputSavedStarGiftId({1}, gift);
+    const auto channel = Api::InputSavedStarGiftId({2}, gift);
+    if (slug.kind != "slug" || slug.value != "SyntheticGift-1"
+        || user.kind != "user" || user.value != "123"
+        || channel.kind != "channel" || channel.value != "456") {
+        return 2;
+    }
+    std::cout << cases << " gate cases and 3 reference routes passed\n";
+}

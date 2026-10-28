@@ -1,0 +1,41 @@
+test_already_removed_no_second_charge (test_reference_service.AcceptanceTests.test_already_removed_no_second_charge) ... ok
+test_atomic_failure_and_retry (test_reference_service.AcceptanceTests.test_atomic_failure_and_retry) ... ok
+test_authorized_channel_manager (test_reference_service.AcceptanceTests.test_authorized_channel_manager) ... ok
+test_burned_gift (test_reference_service.AcceptanceTests.test_burned_gift) ... ok
+test_changed_fee_requires_new_confirmation (test_reference_service.AcceptanceTests.test_changed_fee_requires_new_confirmation) ... ok
+test_committed_retry_after_quote_expiry (test_reference_service.AcceptanceTests.test_committed_retry_after_quote_expiry) ... ok
+test_competing_distinct_operations_charge_once (test_reference_service.AcceptanceTests.test_competing_distinct_operations_charge_once) ... ok
+test_concurrent_same_operation_reuses_receipt (test_reference_service.AcceptanceTests.test_concurrent_same_operation_reuses_receipt) ... ok
+test_empty_operation_is_rejected (test_reference_service.AcceptanceTests.test_empty_operation_is_rejected) ... ok
+test_exact_balance_is_sufficient (test_reference_service.AcceptanceTests.test_exact_balance_is_sufficient) ... ok
+test_expired_quote (test_reference_service.AcceptanceTests.test_expired_quote) ... ok
+test_export_after_quote (test_reference_service.AcceptanceTests.test_export_after_quote) ... ok
+test_export_history_is_monotonic (test_reference_service.AcceptanceTests.test_export_history_is_monotonic) ... ok
+test_external_wallet_requires_supported_custody_flow (test_reference_service.AcceptanceTests.test_external_wallet_requires_supported_custody_flow) ... ok
+test_forged_or_foreign_quote (test_reference_service.AcceptanceTests.test_forged_or_foreign_quote) ... ok
+test_gift_revision_changed (test_reference_service.AcceptanceTests.test_gift_revision_changed) ... ok
+test_hosting_does_not_prove_ownership (test_reference_service.AcceptanceTests.test_hosting_does_not_prove_ownership) ... ok
+test_insufficient_balance (test_reference_service.AcceptanceTests.test_insufficient_balance) ... ok
+test_invalid_fee_configuration (test_reference_service.AcceptanceTests.test_invalid_fee_configuration) ... ok
+test_missing_gift (test_reference_service.AcceptanceTests.test_missing_gift) ... ok
+test_never_exported_gift (test_reference_service.AcceptanceTests.test_never_exported_gift) ... ok
+test_old_quote_invalid_after_export_and_return (test_reference_service.AcceptanceTests.test_old_quote_invalid_after_export_and_return) ... ok
+test_operation_bound_to_actor_gift_and_quote (test_reference_service.AcceptanceTests.test_operation_bound_to_actor_gift_and_quote) ... ok
+test_other_user_cannot_quote (test_reference_service.AcceptanceTests.test_other_user_cannot_quote) ... ok
+test_persisted_marker_blocks_stale_detail_write (test_reference_service.AcceptanceTests.test_persisted_marker_blocks_stale_detail_write) ... ok
+test_quote_cannot_be_applied_to_another_gift (test_reference_service.AcceptanceTests.test_quote_cannot_be_applied_to_another_gift) ... ok
+test_removal_survives_restart_and_new_owner (test_reference_service.AcceptanceTests.test_removal_survives_restart_and_new_owner) ... ok
+test_removed_details_stay_removed_after_export_return (test_reference_service.AcceptanceTests.test_removed_details_stay_removed_after_export_return) ... ok
+test_requires_confirmation (test_reference_service.AcceptanceTests.test_requires_confirmation) ... ok
+test_retry_after_lost_reply (test_reference_service.AcceptanceTests.test_retry_after_lost_reply) ... ok
+test_retry_after_service_restart (test_reference_service.AcceptanceTests.test_retry_after_service_restart) ... ok
+test_returned_gift_new_owner_can_remove (test_reference_service.AcceptanceTests.test_returned_gift_new_owner_can_remove) ... ok
+test_returned_gift_same_fee_and_result (test_reference_service.AcceptanceTests.test_returned_gift_same_fee_and_result) ... ok
+test_revoked_channel_permission (test_reference_service.AcceptanceTests.test_revoked_channel_permission) ... ok
+test_transferred_after_quote (test_reference_service.AcceptanceTests.test_transferred_after_quote) ... ok
+test_unsettled_quote_survives_restart (test_reference_service.AcceptanceTests.test_unsettled_quote_survives_restart) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 12.695s
+
+OK

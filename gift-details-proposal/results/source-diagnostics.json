@@ -1,0 +1,12 @@
+{
+  "base_commit": "f985723b552b30fe1c17d377d57f44e61a15a8c4",
+  "scope": "Unmodified extracted client gate and gift reference function; synthetic data/TL adapters. No application build, payment, RPC or TON contract.",
+  "compiler": "g++.exe (Rev6, Built by MSYS2 project) 16.2.0",
+  "gate_sha256": "59c3323fa42dc7854561872227b2512a541490c9b53d2fcd4383aaf301b385b3",
+  "reference_sha256": "52ca7b5b4ee3e919faf69624a4ab0a3c1a3e8d652769c44c64bf646ad86e12eb",
+  "source_git_blobs_verified": 7,
+  "compile_exit_code": 0,
+  "test_exit_code": 0,
+  "output": "40 gate cases and 3 reference routes passed\n",
+  "stderr": ""
+}

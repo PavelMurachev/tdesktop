@@ -1,0 +1,16 @@
+Title: Allow removing original gift details after TON export and return
+
+Please let the current authorized owner remove original details from any collectible gift that still has them, at the server's quoted fee, regardless of its previous export/mint history. In particular, returning a gift from TON to Telegram should not permanently prevent removal merely because it was once exported. Apply this consistently across gift collections.
+
+The reported issue is that removal is unavailable for previously exported gifts even after return. Please reproduce and clarify the server eligibility rule. In the inspected Desktop code, the removal action depends on a collectible and a positive server-provided drop_original_details_stars quote; its gate has no export/address check. The existing inputInvoiceStarGiftDropOriginalDetails flow may be sufficient for returned gifts if the backend supplies and accepts a supported quote.
+
+Preserve owner/channel permissions, explicit confirmation, the quoted fee and protection against duplicate charges. Recheck ownership and gift state when payment settles. Update all authoritative views and prevent later transfer/export/import from restoring removed details.
+
+For gifts still held in TON, provide a supported owner-authorized removal flow or a clear return-to-Telegram prerequisite. Hosting on a profile is not proof of NFT ownership. Explain which current metadata can change and that previously published blockchain history and copies cannot be assumed erased.
+
+The existing removal operation deletes the whole original-details attribute, including sender, recipient, date and message. A text-only removal choice would need its own defined behavior.
+
+Supporting material is prepared with pinned public-source evidence, compiled diagnostics of unchanged client functions, and 36 passing tests of an offline synthetic acceptance model, including persistent removal across simulated export/return, ownership changes and service restart. Six deliberately broken model rules are detected by negative controls. These are not a Telegram backend/TON implementation, a full application build or real-gift/payment tests. No production client bypass is proposed.
+
+Technical proposal, source evidence, reproducible tests and results:
+https://github.com/PavelMurachev/tdesktop/tree/proposal/gift-original-details/gift-details-proposal

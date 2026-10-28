@@ -1,0 +1,6 @@
+{
+  "test_count": 36,
+  "exit_code": 0,
+  "scope": "Offline synthetic SQLite model; no server, real gifts, billing or TON implementation.",
+  "model_sha256_lf": "c50815a519c46ded5c8bb79bda0ab07b6eddb5e62a05442a37466ae8f506ca1e"
+}

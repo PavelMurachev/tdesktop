@@ -1,0 +1,36 @@
+{
+  "scope": "Six deliberate mutations of the offline model only; not production defects or a Telegram backend baseline.",
+  "reference_model_sha256_lf": "c50815a519c46ded5c8bb79bda0ab07b6eddb5e62a05442a37466ae8f506ca1e",
+  "controls": [
+    {
+      "control": "permanent_export_ban",
+      "test": "test_returned_gift_same_fee_and_result",
+      "broken_rule_detected": true
+    },
+    {
+      "control": "ownership_check_removed",
+      "test": "test_other_user_cannot_quote",
+      "broken_rule_detected": true
+    },
+    {
+      "control": "durable_marker_check_removed",
+      "test": "test_persisted_marker_blocks_stale_detail_write",
+      "broken_rule_detected": true
+    },
+    {
+      "control": "snapshot_marker_mask_removed",
+      "test": "test_removed_details_stay_removed_after_export_return",
+      "broken_rule_detected": true
+    },
+    {
+      "control": "gift_revision_check_removed",
+      "test": "test_old_quote_invalid_after_export_and_return",
+      "broken_rule_detected": true
+    },
+    {
+      "control": "confirmation_check_removed",
+      "test": "test_requires_confirmation",
+      "broken_rule_detected": true
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "repository": "telegramdesktop/tdesktop",
+  "ref": "f985723b552b30fe1c17d377d57f44e61a15a8c4",
+  "fetched_date": "2026-10-28",
+  "files": {
+    "Telegram/SourceFiles/settings/settings_credits_graphics.cpp": {
+      "git_blob_sha": "a1158eef284655aa3747f728423e822d2ec04bbc"
+    },
+    "Telegram/SourceFiles/api/api_premium.cpp": {
+      "git_blob_sha": "0fa1a5ea331b0547ae3086749fdb13fcd48fe01c"
+    },
+    "Telegram/SourceFiles/api/api_credits.cpp": {
+      "git_blob_sha": "8711ab458e422653fc3e277c66b2aa66efb6b898"
+    },
+    "Telegram/SourceFiles/boxes/gift_premium_box.cpp": {
+      "git_blob_sha": "7451879230636b39abe45e14e9a732749c3eac01"
+    },
+    "Telegram/SourceFiles/mtproto/scheme/api.tl": {
+      "git_blob_sha": "8319b7df634d145390c299404129fd161a5dbd2a"
+    },
+    "Telegram/SourceFiles/data/data_star_gift.h": {
+      "git_blob_sha": "64a15e75673dd3567523b2092d5c1cd001264359"
+    },
+    "Telegram/SourceFiles/data/data_credits.h": {
+      "git_blob_sha": "89b57e07a3d7c7f9817374d0c87f45e40f1a3ca8"
+    }
+  }
+}
