@@ -1,5 +1,7 @@
 Title: Allow removing original gift details after TON export and return
 
+Submission note: the returned-gift issue already exists at https://bugs.telegram.org/c/66951. Prefer posting COMMENT.txt there. Use this broader suggestion only if a separate platform feature request is needed.
+
 Please let the current authorized owner remove original details from any collectible gift that still has them, at the server's quoted fee, regardless of its previous export/mint history. In particular, returning a gift from TON to Telegram should not permanently prevent removal merely because it was once exported. Apply this consistently across gift collections.
 
 The reported issue is that removal is unavailable for previously exported gifts even after return. Please reproduce and clarify the server eligibility rule. In the inspected Desktop code, the removal action depends on a collectible and a positive server-provided drop_original_details_stars quote; its gate has no export/address check. The existing inputInvoiceStarGiftDropOriginalDetails flow may be sufficient for returned gifts if the backend supplies and accepts a supported quote.

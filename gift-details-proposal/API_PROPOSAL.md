@@ -6,6 +6,8 @@ For a live collectible with an original-details attribute in Telegram custody, e
 
 This is a proposed policy change, not an identified line of Telegram backend code. First reproduce an affected returned gift and establish whether the field is absent, the invoice is rejected, or metadata mutation is unsupported. If the server already returns a valid quote but a particular client fails to surface it, handle that separately as a reproducible client bug.
 
+Existing public issue #66951 reports an available removal action followed by `STARGIFT_ALREADY_MINTED` on a returned gift. This is third-party evidence for prioritizing invoice/settlement eligibility. Confirm the condition in server code and metadata authority before changing it; the error name alone does not establish the exact implementation or every affected custody state.
+
 Required behavior for a returned gift: removal availability and fee policy match an otherwise equivalent never-exported gift. A previous chain address is not itself a reason for permanent ineligibility. Preserve identity, collectible attributes, ownership and collection membership; do not burn, replace or remint the gift as a shortcut.
 
 ## Authorization, payment and consistency

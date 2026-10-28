@@ -4,6 +4,8 @@ Prepared on 2026-10-28 against Telegram Desktop dev `f985723b552b30fe1c17d377d57
 
 This is a server/API change proposal with an executable offline acceptance model and diagnostics of unchanged Desktop functions. It is not a working Telegram server patch or a TON contract implementation. No production source changes, live requests, real gifts or payments are included.
 
+An existing public [Telegram issue #66951](https://bugs.telegram.org/c/66951), opened by another reporter on October 22, describes the same returned-gift problem and reports `STARGIFT_ALREADY_MINTED`. It is Open with no comments as checked on October 28. This is third-party evidence, not our live reproduction or an official diagnosis. Prefer posting the supporting material from COMMENT.txt to that issue rather than creating a duplicate.
+
 ## Requested behavior
 
 Let the current authorized owner remove original details from any existing collectible gift that still has them, at the server's quoted fee, regardless of whether that gift was ever exported. In particular, returning a gift from TON to Telegram must not permanently exclude it from the supported removal flow merely because it has an export history. Cover collection types uniformly.
@@ -24,6 +26,7 @@ Consequently, deleting a client gate or inventing a fee cannot implement the req
 - [EVIDENCE.md](EVIDENCE.md): pinned source references, facts and unknowns.
 - [TESTING.md](TESTING.md): reproducible commands and precise test limits.
 - [SUGGESTION.txt](SUGGESTION.txt): ready English text for Bugs and Suggestions, category General / all apps.
+- [COMMENT.txt](COMMENT.txt): preferred short follow-up for the existing issue #66951.
 - `tests/reference_service.py`: SQLite model of the proposed in-Telegram service behavior, entirely synthetic.
 - `tests/test_reference_service.py`: 36 acceptance tests, including return to a new owner, restart, stale data, concurrency and rollback.
 - `tests/run_negative_controls.py`: six deliberate model mutations that the acceptance tests must detect.

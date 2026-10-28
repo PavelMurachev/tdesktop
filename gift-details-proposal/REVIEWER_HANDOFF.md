@@ -2,6 +2,8 @@
 
 Request: remove original details from collectible gifts independently of historical mint/export status, especially after return from TON. Retain the normal fee, current-owner checks and explicit confirmation. The user's original report is not independently reproduced.
 
+The existing public Telegram issue is https://bugs.telegram.org/c/66951. Another reporter names `STARGIFT_ALREADY_MINTED` after using the removal action on a returned gift. This package has not reproduced that report. COMMENT.txt is prepared as supporting material for the existing issue, avoiding a duplicate card.
+
 Start with EVIDENCE.md and the pinned `UniqueGiftCanRemoveDetails`, `UniqueGiftRemoveDetailsHandler`, `FromTL(MTPsavedStarGift)` and `InputSavedStarGiftId` functions. There is no identified Desktop export-history condition to delete for this operation. Do not submit a client PR that invents a quote or clears details without accepted payment.
 
 Backend owners should identify the quote/settlement policy for one affected returned gift, review whether the current metadata authority permits the change, and implement the smallest compatible change described in API_PROPOSAL.md. Public client code is insufficient to provide a mergeable backend diff. No new public TL constructor, method name or error string in this package is claimed to be a Telegram API. Model error strings are illustrative.

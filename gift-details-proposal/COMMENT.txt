@@ -1,0 +1,8 @@
+Supporting technical material for this issue:
+https://github.com/PavelMurachev/tdesktop/tree/proposal/gift-original-details/gift-details-proposal
+
+The inspected Desktop removal gate requires a collectible and a positive server-provided drop_original_details_stars quote; it does not check export history. The existing inputInvoiceStarGiftDropOriginalDetails flow is already implemented. The reported STARGIFT_ALREADY_MINTED error therefore merits investigation of server invoice/settlement eligibility for gifts returned to Telegram; it is not resolved by changing a client button.
+
+The proposal preserves current-owner/channel permissions, the normal quoted fee and explicit confirmation. It includes 36 passing tests of an offline synthetic model covering duplicate charges, concurrent requests, restart and preventing removed details from reappearing after a simulated export/return. Six deliberately broken model rules are detected by negative controls. Unmodified extracted client functions pass 40 diagnostic combinations and three gift-reference routes.
+
+These checks are not a Telegram backend or TON implementation, a full application build, or real-gift/payment tests. We have not independently reproduced this reported server error. The existing operation removes the entire original-details attribute, not only the greeting text.

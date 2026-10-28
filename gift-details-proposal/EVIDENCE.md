@@ -19,6 +19,12 @@ The source snapshot and seven Git blob identifiers are recorded in source-manife
 
 A gift's removal action disappears or is unavailable after export to TON, including after return. No affected gift identifier, client version, owned-gift response, invoice error or real-account reproduction was obtained. Do not state that a particular backend predicate has been confirmed or that the failure affects every exported gift.
 
+## Existing public issue found during publication
+
+[Telegram issue #66951: Cannot remove original gift details after TON minting](https://bugs.telegram.org/c/66951) was opened by winEX on October 22. On October 28 its public page is Open and has no comments. The author reports that an owned gift returned from TON still has a removal icon, but submission fails with `STARGIFT_ALREADY_MINTED`. The report identifies Telegram Android 13.1.0 (72291), Samsung Galaxy S23 FE, and an example collectible.
+
+Treat this as a specific third-party reproduction report, not our own test or confirmation from Telegram. It strengthens the case for investigating settlement/invoice eligibility, as distinct from a missing client button or missing fee quote. No private account data was collected. Attach these technical materials to the existing issue instead of filing the same returned-gift report again.
+
 ## Maintainer-only evidence still needed
 
 - Which server condition withholds the quote or rejects the invoice for an affected returned gift?
