@@ -1,67 +1,25 @@
-name: Windows.
+name: Gift transfer Windows Debug.
 
 on:
   push:
-    # Pushes to the canary or private-ci branches run their own workflows.
-    branches-ignore:
-      - public-canary
-      - private-canary
-      - 'private-ci/**'
-      - 'private-ci-*'
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '!docs/building-win*.md'
-      - 'changelog.txt'
-      - 'LEGAL'
-      - 'LICENSE'
-      - '.github/**'
-      - '!.github/workflows/win.yml'
-      - 'lib/xdg/**'
-      - 'snap/**'
-      - 'Telegram/build/docker/**'
-      - 'Telegram/Resources/uwp/**'
-      - 'Telegram/SourceFiles/platform/linux/**'
-      - 'Telegram/SourceFiles/platform/mac/**'
-      - 'Telegram/Telegram/**'
-      - 'Telegram/configure.sh'
-      - 'Telegram/Telegram.plist'
-  pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '!docs/building-win*.md'
-      - 'changelog.txt'
-      - 'LEGAL'
-      - 'LICENSE'
-      - '.github/**'
-      - '!.github/workflows/win.yml'
-      - 'lib/xdg/**'
-      - 'snap/**'
-      - 'Telegram/build/docker/**'
-      - 'Telegram/Resources/uwp/**'
-      - 'Telegram/SourceFiles/platform/linux/**'
-      - 'Telegram/SourceFiles/platform/mac/**'
-      - 'Telegram/Telegram/**'
-      - 'Telegram/configure.sh'
-      - 'Telegram/Telegram.plist'
+    branches: [validation/gift-transfer-windows]
+    paths: [.github/workflows/win.yml]
+
+permissions:
+  contents: read
 
 jobs:
 
   windows:
     name: Windows
-    runs-on: ${{ matrix.arch == 'arm64' && 'windows-11-arm' || ((github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/nightly') && 'depot-windows-latest-16' || 'windows-latest') }}
+    runs-on: windows-latest
+    timeout-minutes: 180
 
     strategy:
       matrix:
-        arch: [x64_x86, x64, arm64]
-        qt: ["", qt6]
-        generator: ["", "Ninja Multi-Config"]
-        exclude:
-          - arch: arm64
-            qt: ""
-          - arch: x64_x86
-            qt: qt6
+        arch: [x64]
+        qt: [qt6]
+        generator: ["Ninja Multi-Config"]
 
     env:
       UPLOAD_ARTIFACT: "true"
@@ -164,6 +122,18 @@ jobs:
           key: ${{ runner.OS }}-${{ matrix.arch }}-${{ matrix.qt || 'qt' }}-${{ env.CACHE_KEY }}
           restore-keys: ${{ runner.OS }}-${{ matrix.arch }}-${{ matrix.qt || 'qt' }}-
 
+      - name: Invalidate incomplete Rust cache.
+        shell: pwsh
+        run: |
+          $root = [IO.Path]::GetFullPath($env:LibrariesPath)
+          $binding = Join-Path $root 'tdesktop_rust/out/src/wallet_engine/wallet_engine.cpp'
+          if (-not (Test-Path -LiteralPath $binding)) {
+            foreach ($stage in @('tlottie', 'wallet-engine', 'tdesktop_rust')) {
+              $key = Join-Path $root ('cache_keys/' + $stage)
+              if (Test-Path -LiteralPath $key) { Remove-Item -LiteralPath $key }
+            }
+          }
+
       - name: Libraries.
         run: |
           %TBUILD%\%REPO_NAME%\Telegram\build\prepare\win.bat skip-release silent ${{ matrix.qt }}
@@ -216,9 +186,23 @@ jobs:
           fi
           echo "TDESKTOP_BUILD_API=$API" >> $GITHUB_ENV
 
+      - name: Verify generated binding before cleanup.
+        shell: pwsh
+        run: |
+          $binding = Join-Path $env:LibrariesPath 'tdesktop_rust/out/src/wallet_engine/wallet_engine.cpp'
+          if (-not (Test-Path -LiteralPath $binding)) { throw 'Missing generated wallet binding before cleanup' }
+          Get-FileHash -LiteralPath $binding -Algorithm SHA256
+
       - name: Free up some disk space.
         shell: bash
-        run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete
+        run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' -o -path '*/tdesktop_rust/out/src/*' -o -path '*/tlottie/*' -o -path '*/wallet-engine/*' ')' -type f ')' -o -empty ')' -delete
+
+      - name: Verify generated binding after cleanup.
+        shell: pwsh
+        run: |
+          $binding = Join-Path $env:LibrariesPath 'tdesktop_rust/out/src/wallet_engine/wallet_engine.cpp'
+          if (-not (Test-Path -LiteralPath $binding)) { throw 'Missing generated wallet binding after cleanup' }
+          Get-FileHash -LiteralPath $binding -Algorithm SHA256
 
       - name: Telegram Desktop build.
         if: env.ONLY_CACHE == 'false'
@@ -237,7 +221,8 @@ jobs:
           -D DESKTOP_APP_DISABLE_CRASH_REPORTS=OFF ^
           %TDESKTOP_BUILD_DEFINE%
 
-          cmake --build ..\out --config Debug --parallel
+          if errorlevel 1 exit /b %errorlevel%
+          cmake --build ..\out --config Debug --parallel 2
 
       - name: Move artifact.
         if: (env.UPLOAD_ARTIFACT == 'true') || (github.ref == 'refs/heads/nightly')
@@ -252,4 +237,4 @@ jobs:
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: artifact\
-          retention-days: 1
+          retention-days: 7
